@@ -38,7 +38,7 @@ impl Clone for Sha256Circuit {
 impl<F: PrimeField> ConstraintSynthesizer<F> for Sha256Circuit {
     fn generate_constraints(self, cs: ConstraintSystemRef<F>) -> Result<(), SynthesisError> {
         let data = UInt8::new_witness_vec(cs.clone(), &self.data).unwrap();
-        let expect = UInt8::new_witness_vec(cs, &self.expect).unwrap();
+        let expect = UInt8::new_witness_vec(cs.clone(), &self.expect).unwrap();
 
         for _ in 0..self.num_repeats {
             let mut sha256_var = Sha256Gadget::default();
@@ -48,6 +48,12 @@ impl<F: PrimeField> ConstraintSynthesizer<F> for Sha256Circuit {
                 .finalize()?
                 .enforce_equal(&DigestVar(expect.clone()))?;
         }
+
+        println!(
+            "num_constraints for {} sha256: {}",
+            self.num_repeats,
+            cs.num_constraints()
+        );
 
         Ok(())
     }
