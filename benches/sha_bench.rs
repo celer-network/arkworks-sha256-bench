@@ -50,7 +50,7 @@ impl<F: PrimeField> ConstraintSynthesizer<F> for Sha256Circuit {
         }
 
         println!(
-            "num_constraints for {} sha256: {}",
+            "num_constraints of {} sha256: {}",
             self.num_repeats,
             cs.num_constraints()
         );
@@ -83,7 +83,7 @@ fn main() {
     let start = ark_std::time::Instant::now();
     let proof = GrothSetup::prove(&pk, circuit, &mut test_rng).unwrap();
     println!(
-        "per-constraint proving time for {} sha256: {} ms",
+        "proving time for {} sha256: {} ms",
         num_repeats,
         start.elapsed().as_millis()
     );
