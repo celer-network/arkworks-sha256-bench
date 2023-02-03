@@ -13,7 +13,7 @@ use ark_crypto_primitives::{
     },
     snark::SNARK,
 };
-use ark_ff::PrimeField;
+use ark_ff::{PrimeField, ToConstraintField};
 use ark_groth16::Groth16;
 use ark_r1cs_std::{prelude::EqGadget, uint8::UInt8};
 use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystemRef, SynthesisError};
@@ -38,7 +38,7 @@ impl Clone for Sha256Circuit {
 impl<F: PrimeField> ConstraintSynthesizer<F> for Sha256Circuit {
     fn generate_constraints(self, cs: ConstraintSystemRef<F>) -> Result<(), SynthesisError> {
         let data = UInt8::new_witness_vec(cs.clone(), &self.data).unwrap();
-        let expect = UInt8::new_witness_vec(cs.clone(), &self.expect).unwrap();
+        let expect = UInt8::new_input_vec(cs.clone(), &self.expect).unwrap();
 
         for _ in 0..self.num_repeats {
             let mut sha256_var = Sha256Gadget::default();
@@ -73,7 +73,7 @@ fn main() {
 
     let circuit = Sha256Circuit {
         data: input_str,
-        expect,
+        expect: expect.clone(),
         num_repeats,
     };
 
@@ -88,7 +88,7 @@ fn main() {
         start.elapsed().as_millis()
     );
     let start = ark_std::time::Instant::now();
-    let res = GrothSetup::verify(&vk, &vec![], &proof).unwrap();
+    let res = GrothSetup::verify(&vk, &expect.to_field_elements().unwrap(), &proof).unwrap();
     println!(
         "verifying time for {} sha256: {} ms",
         num_repeats,
