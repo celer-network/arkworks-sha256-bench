@@ -13,6 +13,7 @@ use ark_ff::{PrimeField, ToConstraintField};
 use ark_groth16::Groth16;
 use ark_r1cs_std::{prelude::EqGadget, uint8::UInt8};
 use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystemRef, SynthesisError};
+use ark_serialize::CanonicalSerialize;
 use ark_std::rand::{self, rngs::StdRng};
 
 struct Sha256Circuit {
@@ -55,6 +56,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let num_of_64_bytes = args[1].parse::<usize>().unwrap();
     let expect = hex::decode(args[2].parse::<String>().unwrap()).unwrap();
+    let setup_only = args[3].parse::<bool>().unwrap();
 
     let input_size = 64 * num_of_64_bytes;
     let input_str = vec![0u8; input_size];
@@ -65,13 +67,25 @@ fn main() {
 
     type GrothSetup = Groth16<Bn254>;
     let mut test_rng = test_rng();
+    let start = ark_std::time::Instant::now();
     let (pk, vk) = GrothSetup::circuit_specific_setup(circuit.clone(), &mut test_rng).unwrap();
+    println!(
+        "setup time for sha256 with input size {} bytes: {} ms.",
+        input_size,
+        start.elapsed().as_millis(),
+    );
+
+    if setup_only {
+        return;
+    }
+
     let start = ark_std::time::Instant::now();
     let proof = GrothSetup::prove(&pk, circuit, &mut test_rng).unwrap();
     println!(
-        "proving time for sha256 with input size {} bytes: {} ms",
+        "proving time for sha256 with input size {} bytes: {} ms. proof size: {}",
         input_size,
-        start.elapsed().as_millis()
+        start.elapsed().as_millis(),
+        proof.serialized_size(ark_serialize::Compress::Yes),
     );
     let start = ark_std::time::Instant::now();
     let res = GrothSetup::verify(&vk, &expect.to_field_elements().unwrap(), &proof).unwrap();
