@@ -70,9 +70,10 @@ fn main() {
     let start = ark_std::time::Instant::now();
     let (pk, vk) = GrothSetup::circuit_specific_setup(circuit.clone(), &mut test_rng).unwrap();
     println!(
-        "setup time for sha256 with input size {} bytes: {} ms.",
+        "setup time for sha256 with input size {} bytes: {} ms. pk size: {}",
         input_size,
         start.elapsed().as_millis(),
+        pk.uncompressed_size(),
     );
 
     if setup_only {
