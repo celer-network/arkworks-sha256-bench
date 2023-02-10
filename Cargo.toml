@@ -15,30 +15,29 @@ version = "0.3.0"
 ################################# Dependencies ################################
 
 [dependencies]
-ark-crypto-primitives = {version = "0.4.0-alpha", default-features = false, features = ["snark", "crh", "r1cs"]}
-ark-ec = {version = "0.4.0-alpha", default-features = false}
-ark-ff = {version = "0.4.0-alpha", default-features = false}
-ark-poly = {version = "0.4.0-alpha", default-features = false}
-ark-r1cs-std = {version = "0.4.0-alpha", default-features = false, optional = true}
-ark-relations = {version = "0.4.0-alpha", default-features = false}
-ark-serialize = {version = "0.4.0-alpha", default-features = false, features = ["derive"]}
-ark-std = {version = "0.4.0-alpha", default-features = false}
+ark-crypto-primitives = {version = "0.4.0", default-features = false, features = ["snark"]}
+ark-ec = {version = "0.4.0", default-features = false}
+ark-ff = {version = "0.4.0", default-features = false}
+ark-poly = {version = "0.4.0", default-features = false}
+ark-r1cs-std = {version = "0.4.0", default-features = false, optional = true}
+ark-relations = {version = "0.4.0", default-features = false}
+ark-serialize = {version = "0.4.0", default-features = false, features = ["derive"]}
+ark-std = {version = "0.4.0", default-features = false}
 
 derivative = {version = "2.0", features = ["use_core"], optional = true}
 tracing = {version = "0.1", default-features = false, features = ["attributes"], optional = true}
 
 rayon = {version = "1", optional = true}
-
 [dev-dependencies]
-ark-bls12-377 = {version = "0.4.0-alpha", default-features = false, features = ["curve"]}
-ark-bls12-381 = {version = "0.4.0-alpha", default-features = false, features = ["curve"]}
-ark-bn254 = {version = "0.4.0-alpha", default-features = false, features = ["curve"]}
-ark-cp6-782 = {version = "0.4.0-alpha", default-features = false}
-ark-mnt4-298 = {version = "0.4.0-alpha", default-features = false, features = ["r1cs", "curve"]}
-ark-mnt4-753 = {version = "0.4.0-alpha", default-features = false, features = ["r1cs", "curve"]}
-ark-mnt6-298 = {version = "0.4.0-alpha", default-features = false, features = ["r1cs"]}
-ark-mnt6-753 = {version = "0.4.0-alpha", default-features = false, features = ["r1cs"]}
-ark-r1cs-std = {version = "0.4.0-alpha", default-features = false}
+ark-bls12-377 = {version = "0.4.0", default-features = false, features = ["curve"]}
+ark-bls12-381 = {version = "0.4.0", default-features = false, features = ["curve"]}
+ark-bn254 = {version = "0.4.0", default-features = false, features = ["curve"]}
+ark-cp6-782 = {version = "0.4.0", default-features = false}
+ark-mnt4-298 = {version = "0.4.0", default-features = false, features = ["r1cs", "curve"]}
+ark-mnt4-753 = {version = "0.4.0", default-features = false, features = ["r1cs", "curve"]}
+ark-mnt6-298 = {version = "0.4.0", default-features = false, features = ["r1cs"]}
+ark-mnt6-753 = {version = "0.4.0", default-features = false, features = ["r1cs"]}
+ark-r1cs-std = {version = "0.4.0", default-features = false}
 csv = {version = "1"}
 hex = "0.4.3"
 
@@ -76,6 +75,3 @@ panic = 'abort'
 [profile.test]
 debug = true
 debug-assertions = true
-incremental = true
-lto = "thin"
-opt-level = 3
